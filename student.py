@@ -41,6 +41,9 @@ def add_student():
     age = data['age']
     grade = data['grade']
 
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
     conn = connect_to_db()
     cursor = conn.cursor()
     query =  cursor.execute("INSERT INTO students (name, age, grade) VALUES (%s, %s, %s)", (name, age, grade) )
