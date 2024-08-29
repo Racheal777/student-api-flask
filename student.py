@@ -83,7 +83,7 @@ def get_students():
 )
 
 
-@app.get('/students/<student_id>')
+@app.get('/students/<int:student_id>')
 def get_student(student_id):
     conn = connect_to_db()
     cursor = conn.cursor()
@@ -97,7 +97,7 @@ def get_student(student_id):
     find_student = cursor.execute('SELECT * from students WHERE id = %s', student_id,)
     result = cursor.fetchone()
 
-
+    cursor.close()
     if not result:
         print(f" student with the id {student_id} does not exist")
         return {
@@ -116,7 +116,7 @@ def get_student(student_id):
 
 
 
-@app.put('/students/<student_id>')
+@app.put('/students/<int:student_id>')
 def update_student(student_id):
     conn = connect_to_db()
     cursor = conn.cursor()
@@ -134,6 +134,7 @@ def update_student(student_id):
     conn.commit()
     print(f"student with id   {student_id}  status has been updated ")
     cursor.close()
+    conn.close()
 
     return jsonify({
         "data": student.get('data'),
@@ -167,4 +168,4 @@ def delete_student(student_id):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
